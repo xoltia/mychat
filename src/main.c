@@ -4,7 +4,7 @@
 #include "string.h"
 #include "app.h"
 
-const char *argp_program_version = "MyChat 0.1.9";
+const char *argp_program_version = "MyChat 0.1.0";
 const char *argp_program_bug_address = "<jll210001@utdallas.edu>";
 static char doc[] = "A simple chat application.";
 static char args_doc[] = "";
