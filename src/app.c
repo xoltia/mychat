@@ -1,4 +1,4 @@
-#include <curses.h>
+#include <ncurses.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <argp.h>
@@ -96,7 +96,14 @@ void chat_app_render(ChatApp* app) {
         for (int j = 0; j < message->attachmentCount; j++)
             wprintw(app->messageWindow, "Attachment: %s\n", message->attachments[j].data);
     }
-    wprintw(app->inputWindow, "> %s\n", app->sendBuffer.data);
+
+    if (app->sendBuffer.length > COLS - 2) {
+        wprintw(app->inputWindow, "..%s", app->sendBuffer.data + app->sendBuffer.length - (COLS - 4));
+    } else {
+        wprintw(app->inputWindow, "> %s", app->sendBuffer.data);
+    }
+    
+
     wrefresh(app->statusWindow);
     wrefresh(app->messageWindow);
     wrefresh(app->inputWindow);
