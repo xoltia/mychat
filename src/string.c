@@ -31,8 +31,12 @@ void string_init_static(String* string, char* data) {
 void string_grow(String* string, int additionalSize) {
     int newSize = string->length + additionalSize + 1;
     if (newSize > string->allocated) {
+        int oldSize = string->allocated;
         string->allocated = (int)pow(2, ceil(log2(newSize)));
-        string->data = realloc(string->data, string->allocated);
+        if (oldSize > 0)
+            string->data = realloc(string->data, string->allocated);
+        else
+            string->data = malloc(string->allocated);
     }
 }
 

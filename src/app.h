@@ -40,7 +40,7 @@ typedef struct {
 } ChatApp;
 
 void chat_app_init(ChatApp* app, String name, bool isServer);
-int chat_app_connect(ChatApp* app, char* address, int port);
+int chat_app_connect(ChatApp* app, char* address, uint16_t port);
 int chat_app_run(ChatApp* app);
 void chat_app_render(ChatApp* app);
 void chat_app_destroy(ChatApp* app);

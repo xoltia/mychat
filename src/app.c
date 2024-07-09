@@ -4,6 +4,7 @@
 #include <argp.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <string.h>
 #include "string.h"
 #include "protocol.h"
 #include "app.h"
@@ -89,7 +90,17 @@ void chat_app_render(ChatApp* app) {
             wbkgd(app->statusWindow, COLOR_PAIR(3));
             break;
     }
-    wprintw(app->statusWindow, "%s\n", app->status == DISCONNECTED ? "Disconnected" : app->status == CONNECTED ? "Connected" : "Idle");
+
+    char* statusString = app->status == DISCONNECTED
+        ? "Disconnected"
+        : app->status == CONNECTED
+        ? "Connected" 
+        : "Idle";
+
+    int padding = COLS - strlen(statusString) - app->peerAddr.length;
+    wprintw(app->statusWindow, "%s", statusString);
+    for (int i = 0; i < padding; i++) wprintw(app->statusWindow, " ");
+    wprintw(app->statusWindow, "%s\n", app->peerAddr.data);
     for (int i = 0; i < app->messageCount; i++) {
         Message* message = app->messages[i];
         wprintw(app->messageWindow, "%s: %s\n", message->isOutgoing ? app->name.data : app->peerName.data, message->content.data);
@@ -241,7 +252,7 @@ void chat_app_check_idle_loop(ChatApp* app) {
     }
 }
 
-int chat_app_connect_server(ChatApp* app, int port) {
+int chat_app_connect_server(ChatApp* app, uint16_t port) {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         perror("socket");
@@ -266,16 +277,35 @@ int chat_app_connect_server(ChatApp* app, int port) {
         return 1;
     }
 
-    app->socketfd = accept(sockfd, NULL, NULL);
+    struct sockaddr_in clientAddr;
+    socklen_t clientAddrSize = sizeof(clientAddr);
+    app->socketfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrSize);
     if (app->socketfd < 0) {
         perror("accept");
         return 1;
     }
 
+    char* portString;
+    char* clientAddrString = inet_ntoa(clientAddr.sin_addr);
+    string_append_static(&app->peerAddr, clientAddrString);
+    string_append_char(&app->peerAddr, ':');
+    if (asprintf(&portString, "%hu", port) != -1) {
+        string_append_static(&app->peerAddr, portString);
+        free(portString);
+    }
+
     return 0;
 }
 
-int chat_app_connect_client(ChatApp* app, char* address, int port) {
+int chat_app_connect_client(ChatApp* app, char* address, uint16_t port) {
+    char* portString;
+    string_append_static(&app->peerAddr, address);
+    string_append_char(&app->peerAddr, ':');
+    if (asprintf(&portString, "%hu", port) != -1) {
+        string_append_static(&app->peerAddr, portString);
+        free(portString);
+    }
+
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         perror("socket");
@@ -306,7 +336,7 @@ int chat_app_connect_client(ChatApp* app, char* address, int port) {
     return 0;
 }
 
-int chat_app_connect(ChatApp* app, char* address, int port) {
+int chat_app_connect(ChatApp* app, char* address, uint16_t port) {
     return app->isServer
         ? chat_app_connect_server(app, port)
         : chat_app_connect_client(app, address, port);
