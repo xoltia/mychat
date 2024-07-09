@@ -4,5 +4,5 @@ A simple chat application.
 ## Building
 Requires ncurses library.
 ```
-gcc -lncurses -lm -lpthread src/*.c -o chat
+gcc -std=c99 -lncurses -lm -lpthread src/*.c -o chat
 ```
