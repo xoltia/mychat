@@ -235,7 +235,7 @@ void protocol_frame_free(Frame* frame) {
         case FRAME_IDENT:
             string_free(&((IdentFrame*)frame)->name);
             break;
-        case FRAME_MSG:
+        case FRAME_MSG: {
             MsgFrame* msgFrame = (MsgFrame*)frame;
             string_free(&msgFrame->content);
             for (uint8_t i = 0; i < msgFrame->attachmentCount; i++) {
@@ -244,6 +244,7 @@ void protocol_frame_free(Frame* frame) {
             free(msgFrame->attachmentNames);
             free(msgFrame->attachmentSizes);
             break;
+        }
         case FRAME_PING:
         case FRAME_PONG:
             break;
