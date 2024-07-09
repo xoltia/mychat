@@ -1,3 +1,5 @@
+#define _GNU_SOURCE 1
+#include <stdio.h>
 #include <ncurses.h>
 #include <stdbool.h>
 #include <stdlib.h>
