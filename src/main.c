@@ -1,3 +1,11 @@
+// Class:       CS 4390 - Computer Networks
+// Assignment:  Chat Application Project
+// Author:      Juan Llamas
+// Build:       gcc -std=c99 -lncurses -lm -lpthread *.c -o chat
+// File:        protocol.h
+// Description: This file contains the main entry point for the chat application,
+//              as well as the argument parsing logic.
+
 #include <stdbool.h>
 #include <argp.h>
 #include <stdlib.h>

@@ -1,3 +1,11 @@
+// Class:       CS 4390 - Computer Networks
+// Assignment:  Chat Application Project
+// Author:      Juan Llamas
+// Build:       gcc -std=c99 -lncurses -lm -lpthread *.c -o chat
+// File:        app.c
+// Description: This file contains the implementation for the
+//              application logic and TUI rendering.
+
 #define _GNU_SOURCE 1
 #include <stdio.h>
 #include <ncurses.h>
@@ -212,7 +220,6 @@ void chat_app_recv_loop(ChatApp* app) {
 
                 pthread_mutex_lock(&app->sendMutex);
                 PongFrame* pongFrame = (PongFrame*)protocol_frame_new(FRAME_PONG);
-                // TODO: Use correct timestamp
                 pongFrame->lastActive = app->lastActive;
                 protocol_frame_write_pong(app->socketfd, pongFrame);
                 protocol_frame_free((Frame*)pongFrame);

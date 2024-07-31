@@ -1,3 +1,11 @@
+// Class:       CS 4390 - Computer Networks
+// Assignment:  Chat Application Project
+// Author:      Juan Llamas
+// Build:       gcc -std=c99 -lncurses -lm -lpthread *.c -o chat
+// File:        string.h
+// Description: This file contains the type definitions for the String
+//              utility class.
+
 #pragma once
 
 typedef struct {

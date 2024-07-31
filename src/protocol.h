@@ -1,3 +1,10 @@
+// Class:       CS 4390 - Computer Networks
+// Assignment:  Chat Application Project
+// Author:      Juan Llamas
+// Build:       gcc -std=c99 -lncurses -lm -lpthread *.c -o chat
+// File:        protocol.h
+// Description: This file contains the definitions for the chat protocol.
+
 #pragma once
 #include <stdint.h>
 #include <sys/socket.h>
