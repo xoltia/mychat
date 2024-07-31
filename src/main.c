@@ -2,7 +2,7 @@
 // Assignment:  Chat Application Project
 // Author:      Juan Llamas
 // Build:       gcc -std=c99 -lncurses -lm -lpthread *.c -o chat
-// File:        protocol.h
+// File:        main.c
 // Description: This file contains the main entry point for the chat application,
 //              as well as the argument parsing logic.
 
