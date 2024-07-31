@@ -37,6 +37,8 @@ void chat_app_free(ChatApp* app) {
     for (int i = 0; i < app->messageCount; i++)
         message_free(app->messages[i]);
     free(app->messages);
+    pthread_mutex_destroy(&app->sendMutex);
+    pthread_mutex_destroy(&app->stateMutex);
     free(app);
 }
 
